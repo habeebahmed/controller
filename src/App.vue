@@ -8,7 +8,10 @@
 
 <script>
 export default {
-  name: 'App'
+  name: 'App',
+  mounted() {
+    
+  }
 }
 </script>
 
@@ -27,5 +30,9 @@ html {
 body {
   margin: 0;
   padding: 0;
+  -webkit-user-select: none;
+  -moz-user-select: -moz-none;
+  -ms-user-select: none;
+  user-select: none;
 }
 </style>

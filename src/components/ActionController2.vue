@@ -2,23 +2,23 @@
   <div class="controller2">
     <div class="left-buttons">
       <div>
-        <span class="fa-stack fa-2x l-button">
+        <span class="fa-stack fa-2x l-button" @click="emitKey(37)" >
           <i class="fas fa-square fa-stack-2x" style="color:blue"></i>
           <i class="fas fa-caret-up fa-stack-2x fa-inverse"></i>
         </span>
       </div>
       <div>
-        <span class="fa-stack fa-2x l-button">
+        <span class="fa-stack fa-2x l-button" @click="emitKey(40)">
           <i class="fas fa-square fa-stack-2x" style="color:blue"></i>
           <i class="fas fa-caret-left fa-stack-2x fa-inverse"></i>
         </span>
-        <span class="fa-stack fa-2x l-button">
+        <span class="fa-stack fa-2x l-button" @click="emitKey(38)">
           <i class="fas fa-square fa-stack-2x" style="color:blue"></i>
           <i class="fas fa-caret-right fa-stack-2x fa-inverse"></i>
         </span>
       </div>
       <div>
-        <span class="fa-stack fa-2x l-button">
+        <span class="fa-stack fa-2x l-button" @click="emitKey(39)">
           <i class="fas fa-square fa-stack-2x" style="color:blue"></i>
           <i class="fas fa-caret-down fa-stack-2x fa-inverse"></i>
         </span>
@@ -26,23 +26,23 @@
     </div>
     <div class="right-buttons">
       <div>
-        <span class="fa-stack fa-1x r-button">
+        <span class="fa-stack fa-1x r-button" @click="emitKey(219)">
           <i class="fas fa-circle fa-stack-2x" style="color:blue"></i>
           <span class="fas fa-stack-1x fa-rotate-90 fa-inverse">X</span>
         </span>
       </div>
       <div>
-        <span class="fa-stack fa-1x r-button">
+        <span class="fa-stack fa-1x r-button" @click="emitKey(221)">
           <i class="fas fa-circle fa-stack-2x" style="color:green"></i>
           <span class="fas fa-stack-1x fa-rotate-90 fa-inverse">A</span>
         </span>
-        <span class="fa-stack fa-1x r-button">
+        <span class="fa-stack fa-1x r-button" @click="emitKey(80)">
           <i class="fas fa-circle fa-stack-2x" style="color:yellow"></i>
           <span class="fas fa-stack-1x fa-rotate-90 fa-inverse">Y</span>
         </span>
       </div>
       <div>
-        <span class="fa-stack fa-1x r-button">
+        <span class="fa-stack fa-1x r-button" @click="emitKey(220)">
           <i class="fas fa-circle fa-stack-2x" style="color:red"></i>
           <span class="fas fa-stack-1x fa-rotate-90 fa-inverse">B</span>
         </span>
@@ -51,23 +51,37 @@
 
     <div class="bottom">
       <div class="back">
-        <i class="fas fa-reply fa-rotate-90" style="color:red"></i>
+        <i class="fas fa-reply fa-rotate-90" style="color:red" @click="emitKey(8)" ></i>
       </div>
       <div class="restart">
-        <i class="fas fa-redo-alt fa-rotate-90" style="color:red"></i>
+        <i class="fas fa-redo-alt fa-rotate-90" style="color:red" @click="emitKey(32)"></i>
       </div>
       <div class="block">
-        <i class="fas fa-shield-alt fa-rotate-90" style="color:red"></i>
+        <i class="fas fa-shield-alt fa-rotate-90" style="color:red" @click="emitKey(17)"></i>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { socket } from './socket'
 export default {
   name: "Controller2",
+  mounted() {
+    const vm = this
+    socket.on('LAYOUT', (payload) => {
+      console.log("In Layout ActionController"+payload.layout);
+      vm.$emit('layoutChange',payload.layout)
+    })
+  },
   data() {
     return {};
+  },
+  methods: {
+    emitKey(val){
+      let data = { keyCode: val }
+      socket.emit('CONTROLLER_CONTROL', { data } )
+    }
   }
 };
 </script>

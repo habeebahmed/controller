@@ -10,9 +10,10 @@
       <div><i class="fas fa-chevron-down l-button" @click="emitKey(39)"></i></div>
     </div>
     <div class="right-buttons">
-      <i class="fas fa-circle r-button r-button-green" @click="emitKey(8)"></i><br>
-      <i class="fas fa-rotate-90 pause-play r-button-green" :class= "[value]" @click="emitKey(32);swap()"></i><br><br>
-      <i class="fas fa-circle r-button r-button-red" @click="emitKey(82)"></i>
+      <i class="fas fa-redo-alt fa-rotate-90 r-button r-button-green" @click="emitKey(82)"></i><br>
+      <i class="fas fa-reply fa-rotate-90 back r-button-red" @click="emitKey(8)"></i><br><br><br>
+      <i class="fas fa-rotate-90 play-pause r-button" :class= "[value]" @click="emitKey(32);swap()"></i>
+      
     </div>
   </div>
 </template>
@@ -23,8 +24,22 @@ export default {
   name: 'Controller',
   data () {
     return {
-      value: "fa-pause"
+      value: "fa-play"
     }
+  },
+  mounted() {
+    const vm = this
+    socket.on('message',(payload) => {
+      console.log(payload);
+      vm.$emit('setController',payload.data.controllerId)
+      
+    })
+
+    socket.on('LAYOUT', (payload) => {
+      console.log("In Layout Dpad"+payload.layout);
+      vm.$emit('layoutChange',payload.layout)
+      
+    })
   },
   methods: {
     emitKey(val){
@@ -49,7 +64,7 @@ export default {
   }
   .left-buttons {
     position: absolute;
-    height: 40vh;
+    height: 45vh;
     width: 70vw;
     /* border: 1px solid whitesmoke; */
     border-radius: 1rem;
@@ -74,7 +89,7 @@ export default {
   }
   
   .r-button {
-    font-size: 30vw;
+    font-size: 25vw;
     cursor: pointer;
   }
   .r-button-red {
@@ -83,10 +98,15 @@ export default {
   .r-button-green {
     color: #00ff7f;
   }
-  .pause-play {
+  .back {
     float: left;
     color: brown;
-    font-size: 8vw;
+    font-size: 12vw;
+    cursor: pointer;
+  }
+  .play-pause {
+    font-size: 25vw;
+
   }
 }
 

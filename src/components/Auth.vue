@@ -37,10 +37,28 @@
         data() {
             return {
                 code:'',
+                
             }
         },
         mounted() {
-            
+            socket.on('LAYOUT', (payload) => {
+                if(payload.status) {
+                    validate(payload.layout)
+                }
+                else {
+                    validate('1')
+                }
+            })
+
+            socket.on('message', (payload) => {
+                console.log("In message");
+                if(payload.status && payload.controllerId == '1') {
+                    validate('1')
+                }
+                else {
+                    validate('0')
+                }
+            })
         },
         methods: {
             addCode(val) {
@@ -53,14 +71,17 @@
             clearCode() {
                 this.code = '';
             },
-            validate() {
+            validate(val) {
 
                 if(this.code == '0') {
-                    
+                    console.log("In Validate");
                     socketStart(this.code)
                     // let data = { keyCode: 15 }
                     // socket.emit('CONTROLLER_CONTROL', { data } )
-                    this.$emit('clicked','1')
+                    val = val ? val : '1'
+                    console.log("Layout "+val);
+                    this.$emit('clicked',val);
+                    this.$emit('onFullScreen')
                 }
                 else {
                     this.code = "INVALID"
